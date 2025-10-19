@@ -1,4 +1,4 @@
-# An Implementation of Gradient Descent
+# An Implementation of Gradient Descent 📉
 
 This project demonstrates the core machine learning optimization technique, **Gradient Descent**, used to find the best coefficients for a linear regression model by minimizing the Residual Sum of Squares (RSS).
 
@@ -9,12 +9,10 @@ This project demonstrates the core machine learning optimization technique, **Gr
 In linear regression, our goal is to model the relationship between a predictor $X$ and a response $y$ using a linear equation.
 
 The **Population Regression Line** (the true relationship) is defined as:
-
 $$y = \beta_{0} + \beta_{1}X + e$$
-
 _Example:_ $$y = 7 - 5X + e$$
 
-| Image 1: Generated Data and True Line |          Image 2: Conceptual Scatter Plot           |
+| Image 1: Generated Data and True Line |          Image 2: Conceptual Scatter Plot           |
 | :-----------------------------------: | :-------------------------------------------------: |
 | ![Generated Data](./images/image.png) | ![Population Regression Line](./images/image-1.png) |
 
@@ -29,16 +27,15 @@ In the real world, we only have the data points ($\mathbf{X}$ and $\mathbf{y}$) 
 To measure how good our estimated coefficients ($\hat{\beta}$) are, we use a **Loss (Cost) Function**. Here, we use the **Residual Sum of Squares (RSS)**:
 
 **Model Prediction ($\hat{y}_i$):**
-
 $$\hat{y}_i = \beta_0 + \sum_{j=1}^p \beta_j x_{ij}$$
 
 **Loss (RSS):**
 
 $$
-\operatorname{RSS}(\beta) = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \sum_{i=1}^n \left(y_i - \beta_0 - \sum_{j=1}^p \beta_j x_{ij}\right)^2
+\text{RSS}(\beta) = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \sum_{i=1}^n \left(y_i - \beta_0 - \sum_{j=1}^p \beta_j x_{ij}\right)^2
 $$
 
-The input to $\operatorname{RSS}(\beta)$ is the set of coefficients $\beta$, and our objective is to find the combination of $\beta$ that **minimizes this cost**.
+The input to $\text{RSS}(\beta)$ is the set of coefficients $\beta$, and our objective is to find the combination of $\beta$ that **minimizes this cost**.
 
 ### Finding the Minimum via Derivatives
 
@@ -54,7 +51,7 @@ _Image 3: 2D RSS Curve illustrating different slopes_
 ![3D RSS Surface 1](./images/image-5.png)
 _Image 4: 3D RSS Surface showing the cost landscape_
 
-![3D RSS Surface 2](./images/image-4.png)
+![Update formula representation](./images/image-4.png)
 _Image 5: Update formula representation_
 
 ---
@@ -81,15 +78,15 @@ Since we want to **minimize** the cost, we move in the opposite direction: the *
 
 ### Step 2: The Update Rule
 
-We start with initial parameter values ($\beta^{\text{(old)}}$) and iteratively adjust them using the update rule(see **image 5**):
+We start with initial parameter values ($\beta^{\text{(old)}}$) and iteratively adjust them using the update rule (see **Image 5**):
 
 $$\beta^{\text{(new)}} = \beta^{\text{(old)}} - \eta \cdot \nabla_\beta L(\beta)$$
 
-|           Term           |         Name          | Role and Significance                                         |
-| :----------------------: | :-------------------: | :------------------------------------------------------------ |
-|  $\beta^{\text{(new)}}$  |  **New Parameters**   | The coefficients after the update step.                       |
-|          $\eta$          |   **Learning Rate**   | A hyperparameter controlling the **step size**.               |
-| $-\nabla_\beta L(\beta)$ | **Negative Gradient** | The direction of **steepest descent** (the fastest way down). |
+|           Term            |         Name           | Role and Significance                                         |
+| :-----------------------: | :--------------------: | :------------------------------------------------------------ |
+|  $\beta^{\text{(new)}}$   |  **New Parameters**    | The coefficients after the update step.                       |
+|          $\eta$           |   **Learning Rate**    | A hyperparameter controlling the **step size**.               |
+| $-\nabla_\beta L(\beta)$  | **Negative Gradient**  | The direction of **steepest descent** (the fastest way down). |
 
 ---
 
@@ -99,7 +96,7 @@ We repeat this process until we meet a **convergence criterion**, such as:
 
 1.  The gradient magnitude approaches zero (we've hit the bottom).
 2.  The loss change between steps is negligible.
-3.  A maximum number of iterations (`steps`) is reached.
+3.  A maximum number of iterations (`steps`) has been reached.
 
 ---
 
