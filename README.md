@@ -84,11 +84,11 @@ We start with initial parameter values ($\beta^{\text{(old)}}$) and iteratively 
 
 $$\beta^{\text{(new)}} = \beta^{\text{(old)}} - \eta \cdot \nabla_\beta L(\beta)$$
 
-|           Term            |         Name           | Role and Significance                                         |
-| :-----------------------: | :--------------------: | :------------------------------------------------------------ |
-|  $\beta^{\text{(new)}}$   |  **New Parameters**    | The coefficients after the update step.                       |
-|          $\eta$           |   **Learning Rate**    | A hyperparameter controlling the **step size**.               |
-| $-\nabla_\beta L(\beta)$  | **Negative Gradient**  | The direction of **steepest descent** (the fastest way down). |
+|         Term         |       Name        | Role and Significance                                         |
+| :------------------: | :---------------: | :------------------------------------------------------------ |
+| $\displaystyle \beta^{\text{(new)}}$ | **New Parameters** | The coefficients after the update step.                       |
+|   $\displaystyle \eta$   | **Learning Rate** | A hyperparameter controlling the **step size**.               |
+|  $-\nabla_\beta L(\beta)$  | **Negative Gradient** | The direction of **steepest descent** (the fastest way down). |
 
 ---
 
