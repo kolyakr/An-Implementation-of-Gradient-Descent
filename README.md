@@ -1,117 +1,114 @@
-For example, here we generate some data, using linear regression model:
+# Minimizing Loss in Linear Regression: An Implementation of Gradient Descent
+
+This project demonstrates the core machine learning optimization technique, **Gradient Descent**, used to find the best coefficients for a linear regression model by minimizing the Residual Sum of Squares (RSS).
+
+---
+
+## 1. The Problem: Finding Unknown Coefficients
+
+In linear regression, our goal is to model the relationship between a predictor $X$ and a response $y$ using a linear equation.
+
+The **Population Regression Line** (the true relationship) is defined as:
 $$y = \beta_{0} + \beta_{1}X + e$$
-$$y = 7-5X + e$$
+_Example:_ $$y = 7 - 5X + e$$
 
-![alt text](./images/image.png)
+| Image 1: Generated Data and True Line |          Image 2: Conceptual Scatter Plot           |
+| :-----------------------------------: | :-------------------------------------------------: |
+| ![Generated Data](./images/image.png) | ![Population Regression Line](./images/image-1.png) |
 
-And above we see those generated data, and `population regression line` since we know all values of coefficients in the epxression
+In the real world, we only have the data points ($\mathbf{X}$ and $\mathbf{y}$) and **do not know the true coefficients ($\beta_0, \beta_1, \dots$)**. Our task is to **estimate** these coefficients from the data.
 
-![alt text](./images/image-1.png)
+---
 
-Bun in real world - we do not know the coefficients, we have only x`s and y, so, here is the question, how observe the values of these coefficients?
+## 2. The Solution: Minimizing the Cost Function
 
-One good way to do it - `gradient descent`
+### The Cost Function: Residual Sum of Squares (RSS)
 
-First of all, we need some `loss(cost) function`, which measures how our predictions far from true. Here, as a loss function, i will use `RSS(residual sum of squares)`:
+To measure how good our estimated coefficients ($\hat{\beta}$) are, we use a **Loss (Cost) Function**. Here, we use the **Residual Sum of Squares (RSS)**:
 
-Data $(x_{i1},\ldots,x_{ip},y_i)$ for $i=1,\ldots,n$.
-Model:
-$$\hat{y}_i = \beta_0 + \sum_{j=1}^p \beta_j x_{ij}.$$
-Loss (RSS):
+**Model Prediction ($\hat{y}_i$):**
+$$\hat{y}_i = \beta_0 + \sum_{j=1}^p \beta_j x_{ij}$$
+
+**Loss (RSS):**
 
 $$
-\operatorname{RSS}(\beta) = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \sum_{i=1}^n \left(y_i - \beta_0 - \sum_{j=1}^p \beta_j x_{ij}\right)^2.
+\operatorname{RSS}(\beta) = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \sum_{i=1}^n \left(y_i - \beta_0 - \sum_{j=1}^p \beta_j x_{ij}\right)^2
 $$
 
-,
-and this function takes as an input - set of $\beta$ coeffcients, and our task - is to find those combintation, that `minimizes the cost`
+The input to $\operatorname{RSS}(\beta)$ is the set of coefficients $\beta$, and our objective is to find the combination of $\beta$ that **minimizes this cost**.
 
-In order to minimize cost function, we can take a derivate of it, and see, is the slope equals to zero at certain pair of $\beta$ coefficients, because this will mean what we are in the minima
+### Finding the Minimum via Derivatives
 
-![alt text](./images/image-2.png)
+We can find the minimum by checking where the derivative (or slope) of the cost function is zero:
 
-At **Figure 1**, taking derivative of RSS with respect to b0 tells us: with a tiny change of $\beta_{0}$, how RSS will change?
+- A **Negative Slope** ($\beta_a$) means the cost is decreasing; we need to keep moving.
+- A **Positive Slope** ($\beta_c$) means the cost is increasing; we've gone too far.
+- A **Zero Slope** ($\beta_i$) signals a potential minimum.
 
-- if we take $\beta_{a}$ as an coefficients - the slope of a tangent line will be negative, which tells us, that RSS is decreasing, but its not minima
-- if we take $\beta_{c}$ as a coefficients that reduces RSS - we will get positive slope, which says that RSS is increasing - this is not our goal
-- but if we take $\beta_{i}$, we see that the slope at that point is zero and it say TO STOP,
-  because better result we will never get(if this is global minima)
+|              Image 3: 2D RSS Curve              |                              Image 4 & 5: 3D RSS Surface                              |
+| :---------------------------------------------: | :-----------------------------------------------------------------------------------: |
+| ![RSS Derivative Example](./images/image-2.png) | ![3D RSS Surface 1](./images/image-5.png) & ![3D RSS Surface 2](./images/image-4.png) |
 
-![alt text](./images/image-5.png)
+---
 
-At **Figure 2** and **Figure 3** we can see this in a 3D
+## 3. The Algorithm: Gradient Descent
 
-So, this images are all great(i hope you liked it) and this words are fantastic, but how actually compute it?
-Oh, this is not hard. The algorithm:
+Since the cost surface is often multi-dimensional (one dimension for each coefficient), we use **Gradient Descent** to systematically navigate to the minimum.
 
-#### Step 1: Finding the Direction of Steepest Ascent (The Gradient)
+### Step 1: Calculate the Gradient ($\nabla_\beta L(\beta)$)
 
-To find the minimum of a function in a multi-dimensional space, we first need to know which way is **"up"** (the steepest increase). This direction is given by the **gradient**.
-
-In higher dimensions, the derivative of a function $L$ with respect to a vector of parameters $\beta$ is called the **gradient**, denoted $\nabla_\beta L(\beta)$. It's a vector containing the partial derivative for each parameter:
+The **gradient** is a vector of partial derivatives that points in the direction of the **steepest ascent** of the loss function $L(\beta)$.
 
 $$
 \nabla_\beta L(\beta) =
 \begin{bmatrix}
+\frac{\partial L}{\partial\beta_0} \\
 \frac{\partial L}{\partial\beta_1} \\
-\frac{\partial L}{\partial\beta_2} \\
 \vdots \\
-\frac{\partial L}{\partial\beta_n}
+\frac{\partial L}{\partial\beta_p}
 \end{bmatrix}
 $$
 
-- $L(\beta)$ is the **Cost Function** (or Loss Function), which quantifies how far off our model's predictions are from the true values.
-- $\beta$ represents the vector of **Coefficients** (or parameters) we are trying to optimize.
+Since we want to **minimize** the cost, we move in the opposite direction: the **negative gradient** $(-\nabla_\beta L(\beta))$, which points to the steepest decrease.
 
-The gradient $\nabla_\beta L(\beta)$ tells us: "For a tiny change in any single parameter $\beta_i$, how much will the cost $L$ be affected?" Crucially, the entire gradient vector points in the direction where the cost function **increases the fastest**.
+### Step 2: The Update Rule
 
-Since our goal is to find the minimum, we must move in the opposite direction—the direction of the fastest **decrease**. Therefore, we use the **negative gradient**:
-
-$$-\nabla_\beta L(\beta)$$
-
----
-
-#### Step 2: Evaluating the Current Position
-
-We begin by taking some **initial values** for our parameters, $\beta^{\text{(old)}}$. We then substitute these values into the gradient expression, $\nabla_\beta L(\beta)$.
-
-- If the magnitude of the gradient at this point is **zero** or very close to zero, it means we are at a **local minimum** (or potentially a maximum or saddle point) where the slope is flat.
-- If the gradient is **non-zero**, it signals that the function is still sloping, and we need to **"go deeper"** (move further down the cost surface).
-
----
-
-#### Step 3: Taking a Step Towards the Minimum (The Update Rule)
-
-If we are not yet at a minimum, we need to calculate a new, improved set of parameters, $\beta^{\text{(new)}}$. This is where the core **Gradient Descent Update Rule** comes into play:
+We start with initial parameter values ($\beta^{\text{(old)}}$) and iteratively adjust them using the update rule:
 
 $$\beta^{\text{(new)}} = \beta^{\text{(old)}} - \eta \cdot \nabla_\beta L(\beta)$$
 
-This formula dictates how to update the parameters based on the direction of steepest descent.
+|           Term           |         Name          | Role and Significance                                         |
+| :----------------------: | :-------------------: | :------------------------------------------------------------ |
+|  $\beta^{\text{(new)}}$  |  **New Parameters**   | The coefficients after the update step.                       |
+|          $\eta$          |   **Learning Rate**   | A hyperparameter controlling the **step size**.               |
+| $-\nabla_\beta L(\beta)$ | **Negative Gradient** | The direction of **steepest descent** (the fastest way down). |
 
-Here's a breakdown of the components:
+### Step 3: Iteration and Convergence
 
-|          Term           |        Name         | Role and Significance                                                                                                                                                               |
-| :---------------------: | :-----------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| $\beta^{\text{(new)}}$  | **New Parameters**  | The updated set of coefficients after taking one optimization step.                                                                                                                 |
-| $\beta^{\text{(old)}}$  | **Old Parameters**  | The current coefficients before the update.                                                                                                                                         |
-|         $\eta$          |  **Learning Rate**  | A crucial **hyperparameter** that controls the **step size**. A small $\eta$ means slow convergence but potentially better accuracy; a large $\eta$ risks overshooting the minimum. |
-| $\nabla_\beta L(\beta)$ | **Gradient Vector** | The direction of **steepest ascent** for the loss function.                                                                                                                         |
-|           $-$           |   **Subtraction**   | Ensures we move in the direction **opposite** to the gradient (the direction of steepest **descent**).                                                                              |
+We repeat this process until we meet a **convergence criterion**, such as:
+
+1.  The gradient magnitude approaches zero (we've hit the bottom).
+2.  The loss change between steps is negligible.
+3.  A maximum number of iterations (`steps`) is reached.
 
 ---
 
-## ![alt text](./images/image-4.png)
+## 4. Code Implementation
 
-#### Step 4: Iteration and Convergence
+The provided Python code implements this Gradient Descent process using `sympy` for symbolic differentiation and `numpy` for numerical evaluation and vector operations.
 
-The process is inherently **iterative**. We treat the new parameters, $\beta^{\text{(new)}}$, as the old parameters for the next iteration.
+### `RSS_gradient(X, y)`
 
-We **repeat** steps 1 through 3 until a **convergence criterion** is met. This often means:
+This function symbolically computes the **gradient** of the RSS cost function. It uses `sympy` to create the symbolic derivatives $\frac{\partial \text{RSS}}{\partial \beta_i}$ based on the input data $X$ and $y$.
 
-1.  The magnitude of the gradient is extremely small (approaching zero).
-2.  The cost function $L(\beta)$ stops changing significantly between successive steps.
-3.  A maximum number of iterations (epochs) has been reached.
+### `compute_gradient(grad, b)`
 
-By continuously following the negative gradient, we guarantee that with each step, the cost function $L(\beta)$ will decrease (assuming a properly chosen learning rate $\eta$), eventually leading us to the lowest point on the cost surface.
+This function takes the list of **symbolic gradient expressions** (`grad`) and a set of **current numerical coefficients** (`b`), substitutes the numerical values into the expressions, and returns the resulting **numerical gradient vector**.
 
-See the code implementation in the file above, hope you enjoy it!
+### `gradient_descent(X, y, steps=1000)`
+
+This is the main driver function. It initializes coefficients, sets the learning rate, and runs the iterative loop:
+
+1.  **Calculates** the numerical gradient (`compute_gradient`).
+2.  **Applies** the update rule: `b_values = b_values - computed_gradient * learning_rate`.
+3.  **Repeats** until convergence or the step limit is hit, returning the final optimized coefficients.
