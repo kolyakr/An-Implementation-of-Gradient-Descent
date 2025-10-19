@@ -1,4 +1,4 @@
-# An Implementation of Gradient Descent 📉
+# An Implementation of Gradient Descent
 
 This project demonstrates the core machine learning optimization technique, **Gradient Descent**, used to find the best coefficients for a linear regression model by minimizing the Residual Sum of Squares (RSS).
 
@@ -9,8 +9,8 @@ This project demonstrates the core machine learning optimization technique, **Gr
 In linear regression, our goal is to model the relationship between a predictor $X$ and a response $y$ using a linear equation.
 
 The **Population Regression Line** (the true relationship) is defined as:
-$$y = \beta_{0} + \beta_{1}X + e$$
-_Example:_ $$y = 7 - 5X + e$$
+$$y = \beta_{0} + \beta_{1}X + \text{e}$$
+_Example:_ $$y = 7 - 5X + \text{e}$$
 
 | Image 1: Generated Data and True Line |          Image 2: Conceptual Scatter Plot           |
 | :-----------------------------------: | :-------------------------------------------------: |
